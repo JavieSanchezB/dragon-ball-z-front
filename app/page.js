@@ -1,54 +1,53 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import CharacterList from '../components/CharacterList';
+// app/page.js
+import React, { useState, useEffect } from 'react';
+import CharacterCard from '../components/CharacterCard'; // Ruta correcta
 import Loading from '../components/Loading';
 import Error from '../components/Error';
+import styles from '../styles/ButtonStyles.module.css';
 
-export default function Home() {
-  const [characterData, setCharacterData] = useState(null);
+function Page() {
+  const [characters, setCharacters] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    fetch('/api/personaje')
-      .then(response => response.json())
-      .then(data => {
-        setCharacterData(data);
+    const fetchCharacters = async () => {
+      try {
+        const response = await fetch(`/api/personaje?page=${currentPage}&limit=100`);
+        const data = await response.json();
+        setCharacters(prev => [...prev, ...data.character.items]);
         setLoading(false);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
+      } catch (err) {
+        setError(err);
         setLoading(false);
-      });
-  }, []);
+      }
+    };
+
+    fetchCharacters();
+  }, [currentPage]);
 
   if (loading) return <Loading />;
-  if (!characterData) return <Error />;
-
-  const { message, character } = characterData;
+  if (error) return <Error message="Error cargando la información de los personajes." />;
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>{message}</h1>
-      <CharacterList characters={[character]} />
+    <div>
+      <h1>Personajes de Dragon Ball Z</h1>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+        {characters.map(character => (
+          <CharacterCard key={character.id} character={character} />
+        ))}
+      </div>
+      <button
+        onClick={() => setCurrentPage(prev => prev + 1)}
+        className={styles.button} // Aplica los estilos del botón
+      >
+        Cargar más
+      </button>
     </div>
   );
 }
 
-const styles = {
-  container: {
-    padding: '20px',
-    fontFamily: 'Arial, sans-serif',
-    backgroundColor: '#f5f5f5',
-    borderRadius: '10px',
-    maxWidth: '800px',
-    margin: '0 auto',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-    animation: 'fadeIn 1s ease-in-out',
-  },
-  title: {
-    textAlign: 'center',
-    color: '#333',
-    marginBottom: '20px',
-  },
-};
+export default Page;
