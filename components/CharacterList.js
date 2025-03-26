@@ -13,7 +13,7 @@ const CharacterList = () => {
   const fetchCharacters = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/characters?page=${page}&limit=10`);
+      const response = await fetch(`/api/characters?page=${page}&limit=100`);
       const data = await response.json();
       if (data.items.length > 0) {
         setCharacters(prev => [...prev, ...data.items]);
