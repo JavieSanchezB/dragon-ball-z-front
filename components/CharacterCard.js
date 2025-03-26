@@ -13,7 +13,7 @@ const CharacterCard = ({ character }) => {
         <div className={styles.back}>
           {/* Contenido para el reverso de la tarjeta si lo deseas */
             <div className={styles.content}>
-            <h2 className={styles.name}>{character.name}</h2>
+            <h2 className={styles.name}><strong>Nombre:</strong>{character.name}</h2>
             <p className={styles.name}><strong>Ki:</strong> {character.ki}</p>
             <p className={styles.name}><strong>Max Ki:</strong> {character.maxKi}</p>
             <p className={styles.name}><strong>Race:</strong> {character.race}</p>
