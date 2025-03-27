@@ -1,6 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* styles/globals.css o tu archivo CSS principal */
+@import url('https://fonts.cdnfonts.com/css/saiyan-sans');
+
+/* O esta alternativa */
+@font-face {
+  font-family: 'DragonBall';
+  src: url('https://dbz-hk.kuku.lu/fonts/Saiyan-Sans.ttf') format('truetype');
+}
 
 :root {
   --foreground-rgb: 0, 0, 0;

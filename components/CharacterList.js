@@ -7,50 +7,82 @@ const CharacterList = () => {
   const [characters, setCharacters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const [meta, setMeta] = useState({ 
+    currentPage: 1, 
+    totalPages: 1 
+  });
+  const [links, setLinks] = useState({
+    first: '',
+    previous: '',
+    next: '',
+    last: ''
+  });
 
-  const fetchCharacters = useCallback(async () => {
+  const fetchCharacters = useCallback(async (url = '/api/characters?limit=10') => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/characters?page=${page}&limit=100`);
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Error en la respuesta');
+      
       const data = await response.json();
-      if (data.items.length > 0) {
-        setCharacters(prev => [...prev, ...data.items]);
-        setHasMore(data.meta.currentPage < data.meta.totalPages);
-      } else {
-        setHasMore(false);
-      }
-      setLoading(false);
+      
+      setCharacters(data.items);
+      setMeta({
+        currentPage: data.meta.currentPage,
+        totalPages: data.meta.totalPages
+      });
+      setLinks(data.links);
+      setError(null);
     } catch (err) {
-      setError('Error cargando la información de los personajes.');
+      setError('Error cargando los personajes');
+    } finally {
       setLoading(false);
     }
-  }, [page]);
+  }, []);
 
   useEffect(() => {
-    fetchCharacters();
-  }, [fetchCharacters]);
+    fetchCharacters(links.first || '/api/characters?limit=10');
+  }, []);
 
-  const loadMore = () => {
-    if (!loading && hasMore) {
-      setPage(prev => prev + 1);
-    }
-  };
+  const handleNextPage = () => links.next && fetchCharacters(links.next);
+  const handlePrevPage = () => links.previous && fetchCharacters(links.previous);
 
   return (
     <div>
       <div style={styles.cardContainer}>
         {characters.map(character => (
-          <CharacterCard key={character.id} character={character} />
+          <CharacterCard 
+            key={character.id} 
+            character={character} 
+          />
         ))}
       </div>
+
       {loading && <Loading />}
       {error && <Error message={error} />}
-      {hasMore && !loading && (
-        <button onClick={loadMore} style={styles.loadMoreButton}>
-          Load More
-        </button>
+
+      {!loading && !error && (
+        <div style={styles.pagination}>
+          <button
+            onClick={handlePrevPage}
+            style={styles.button}
+            disabled={!links.previous}
+          >
+            Anterior
+          </button>
+          
+          <span style={styles.pageInfo}>
+            Página {meta.currentPage} de {meta.totalPages}
+          </span>
+          
+          <button
+            onClick={handleNextPage}
+            style={styles.button}
+            disabled={!links.next}
+          >
+            Siguiente
+          </button>
+        </div>
       )}
     </div>
   );
@@ -58,22 +90,38 @@ const CharacterList = () => {
 
 const styles = {
   cardContainer: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+    gap: '20px',
+    padding: '20px'
+  },
+  pagination: {
     display: 'flex',
-    flexWrap: 'wrap',
     justifyContent: 'center',
-    padding: '10px',
+    alignItems: 'center',
+    gap: '20px',
+    padding: '20px',
+    background: '#f5f5f5'
   },
-  loadMoreButton: {
-    display: 'block',
-    width: '100px',
-    margin: '20px auto',
-    padding: '10px',
-    backgroundColor: '#0070f3',
-    color: '#fff',
+  button: {
+    padding: '10px 25px',
+    backgroundColor: '#FFD700',
+    color: '#2C2C2C',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius: '8px',
     cursor: 'pointer',
+    fontWeight: 'bold',
+    transition: 'all 0.3s ease',
+    ':disabled': {
+      backgroundColor: '#e0e0e0',
+      cursor: 'not-allowed'
+    }
   },
+  pageInfo: {
+    fontSize: '1.1rem',
+    color: '#2C2C2C',
+    fontWeight: '500'
+  }
 };
 
 export default CharacterList;
