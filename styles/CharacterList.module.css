@@ -1,3 +1,51 @@
+/* Estilos para los filtros */
+.filterContainer {
+  background: rgba(0, 0, 0, 0.7);
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  align-items: end;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.filterGroup label {
+  color: #FFD700;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.filterSelect, .filterInput {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 2px solid #FFD700;
+  background: #222;
+  color: white;
+}
+
+.resetButton {
+  padding: 0.5rem 1rem;
+  background: #FF0000;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  align-self: center;
+}
+
+.resetButton:hover {
+  background: #CC0000;
+  transform: translateY(-2px);
+}
+
 /* Estilos de paginación */
 .container {
   max-width: 1200px;
@@ -95,4 +143,19 @@
   background-color: #FFD700;
   color: #222;
   font-weight: bold;
+}
+
+.filterSelect {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD700'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1.5rem;
+  padding-right: 2rem;
+}
+
+/* Estilo para opciones */
+.filterSelect option {
+  background: #333;
+  color: white;
 }
