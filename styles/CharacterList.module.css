@@ -1,0 +1,98 @@
+/* Estilos de paginación */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Esto centrará todo el contenido */
+}
+
+.title {
+  font-family: 'Saiyan Sans', 'DragonBall', sans-serif;
+  font-size: 3.5rem;
+  color: #FFD700;
+  text-shadow: 
+    3px 3px 0 #FF0000,
+    -1px -1px 0 #FF0000,
+    1px -1px 0 #FF0000,
+    -1px 1px 0 #FF0000,
+    1px 1px 0 #FF0000;
+  letter-spacing: 2px;
+  margin: 1rem 0 2rem;
+  text-align: center;
+  transform: rotate(-5deg);
+  animation: titlePulse 2s infinite alternate;
+}
+
+@keyframes titlePulse {
+  from {
+    transform: rotate(-5deg) scale(1);
+    text-shadow: 
+      3px 3px 0 #FF0000,
+      -1px -1px 0 #FF0000,
+      1px -1px 0 #FF0000,
+      -1px 1px 0 #FF0000,
+      1px 1px 0 #FF0000;
+  }
+  to {
+    transform: rotate(-5deg) scale(1.05);
+    text-shadow: 
+      5px 5px 0 #FF0000,
+      -2px -2px 0 #FF0000,
+      2px -2px 0 #FF0000,
+      -2px 2px 0 #FF0000,
+      2px 2px 0 #FF0000;
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.paginationButton {
+  padding: 8px 16px;
+  background-color: #FFD700;
+  color: #222;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.paginationButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.paginationButton:hover:not(:disabled) {
+  background-color: #FFC000;
+  transform: translateY(-1px);
+}
+
+.pageButton {
+  padding: 8px 12px;
+  min-width: 40px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pageButton:hover {
+  background-color: #444;
+}
+
+.activePage {
+  background-color: #FFD700;
+  color: #222;
+  font-weight: bold;
+}
